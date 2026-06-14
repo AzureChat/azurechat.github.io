@@ -19,7 +19,7 @@
       Custom domain at the root                      -> set  PATH_SEGMENTS = 0
     */
     (() => {
-      const PATH_SEGMENTS = 1;
+      const PATH_SEGMENTS = 0;
       const { origin, pathname, search } = window.location;
       const segments = pathname.split("/").filter(Boolean);
       const baseSegments = segments.slice(0, PATH_SEGMENTS);
