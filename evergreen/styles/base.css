@@ -1,0 +1,181 @@
+/*
+  Base element styling and a few primitives. Selectors are kept at zero
+  specificity with :where() so component classes always win cleanly.
+*/
+
+:where(html) {
+  tab-size: 2;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :where(html) {
+    scroll-behavior: smooth;
+  }
+}
+
+:where(body) {
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  color: var(--text);
+  background-color: var(--bg);
+  background-image: radial-gradient(
+      900px 520px at 12% -8%,
+      var(--bg-grad-1),
+      transparent 60%
+    ),
+    radial-gradient(820px 600px at 104% 0%, var(--bg-grad-2), transparent 55%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  text-rendering: optimizeLegibility;
+  display: flex;
+  flex-direction: column;
+}
+
+:where(main) {
+  flex: 1 0 auto;
+}
+
+/* The router moves focus here on each navigation (for screen readers); the
+   content change is the visible cue, so this container needs no focus ring. */
+main:focus {
+  outline: none;
+}
+
+:where(h1, h2, h3, h4) {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+:where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(:focus-visible) {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* ---- Code ------------------------------------------------------------- */
+:where(code, kbd, samp) {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+:where(:not(pre) > code) {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  padding: 0.12em 0.4em;
+  border-radius: var(--radius-s);
+}
+
+:where(pre) {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  line-height: 1.6;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: var(--space-s) var(--space-m);
+  overflow-x: auto;
+}
+
+:where(pre code) {
+  background: none;
+  border: 0;
+  padding: 0;
+  white-space: pre;
+  font-size: inherit;
+}
+
+/* ---- Layout primitives ----------------------------------------------- */
+.wrap {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--wrap-pad);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+}
+
+.link {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color var(--dur) var(--ease);
+}
+
+.link:hover {
+  color: var(--accent);
+}
+
+.link--arrow {
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Skip link -------------------------------------------------------- */
+.skip-link {
+  position: fixed;
+  top: var(--space-2xs);
+  left: var(--space-2xs);
+  z-index: 100;
+  padding: 0.65rem 0.95rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: var(--radius-s);
+  font: 600 var(--step--1) / 1 var(--font-mono);
+  transform: translateY(-160%);
+  transition: transform var(--dur) var(--ease);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline-offset: 2px;
+}
+
+/* ---- Reduced motion --------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

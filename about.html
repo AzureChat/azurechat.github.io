@@ -1,0 +1,112 @@
+<section class="section">
+  <div class="wrap">
+    <div class="article-wrap">
+      <header class="article__header">
+        <p class="eyebrow">how it works</p>
+        <h1 class="article__title">The platform is the framework</h1>
+        <p class="article__lede">
+          Evergreen is a bet that, for a lot of sites, the modern web platform is
+          already enough. No build tools, no dependencies, no abstraction layer to
+          learn or replace later — just files a browser can run directly.
+        </p>
+      </header>
+
+      <div class="prose">
+        <p>
+          The whole thing is static files served as-is. There's no server-side
+          code, no compile step, and no <code>node_modules</code>. You can read
+          every line that ships, because what ships is exactly what's written.
+          Here's how the moving parts fit together.
+        </p>
+
+        <h2>Routing without a server</h2>
+        <p>
+          A static host hands back a file that exists at a path; ask for a path
+          with no file and you get a 404. So routes live after the
+          <strong>#</strong> instead — the one part of a URL the server never
+          sees. Every request resolves to <code>index.html</code>, and a small
+          router reads the hash, matches it against a table, and swaps the
+          contents of <code>&lt;main&gt;</code>. Plain
+          <code>&lt;a href='#/about'&gt;</code> links just work, because the
+          browser fires a <code>hashchange</code> event the router listens for.
+        </p>
+        <p>
+          For the rare case of someone typing a real path directly, a tiny
+          <code>404.html</code> turns that path into a hash and bounces to the
+          root.
+        </p>
+
+        <h2>Composing from plain HTML</h2>
+        <p>
+          The header and footer live once, as fragments in
+          <code>partials/</code>, and a ~20-line custom element pulls them in:
+        </p>
+        <pre><code>&lt;html-include src='partials/header.html'&gt;&lt;/html-include&gt;</code></pre>
+        <p>
+          It fetches the file and injects it as ordinary page content, so the
+          global stylesheet styles it like everything else. Page bodies work the
+          same way — the router fetches <code>pages/*.html</code> and composes
+          them into <code>&lt;main&gt;</code>.
+        </p>
+
+        <h2>A blog from one JSON file</h2>
+        <p>
+          Every post lives in <code>data/posts.json</code>, imported straight
+          into a module with an import attribute — no <code>fetch()</code>, no
+          <code>JSON.parse()</code>:
+        </p>
+        <pre><code>import posts from '../data/posts.json' with { type: 'json' };</code></pre>
+        <p>
+          The list view and the article view import the same file; the browser
+          fetches it once and shares it. Adding a post means editing one file and
+          pushing.
+        </p>
+
+        <h2>Transitions, built in</h2>
+        <p>
+          Navigation animates with the View Transitions API: the router wraps
+          each DOM swap in <code>document.startViewTransition()</code>, and the
+          browser cross-fades between views for free. Matching
+          <code>view-transition-name</code> values let a post's title morph out of
+          the list and into the article. When
+          <code>prefers-reduced-motion</code> is set, the router skips the effect
+          entirely.
+        </p>
+
+        <h2>Styling that composes</h2>
+        <p>
+          A single <code>&lt;link&gt;</code> loads <code>styles/index.css</code>,
+          which uses <code>@layer</code> and <code>@import</code> to pull in the
+          rest in a fixed order. Cascade layers mean each stylesheet can be edited
+          on its own without specificity battles, and the whole palette is a
+          handful of <code>oklch</code> custom properties — including a light theme
+          and a dark one.
+        </p>
+
+        <h2>What it runs on</h2>
+        <p>
+          Everything here is Baseline in current evergreen browsers. JSON module
+          imports landed in Chrome 123, Safari 17.2, and Firefox 128.
+          Same-document view transitions are supported in Chrome 111, Safari 18,
+          and Firefox 144. Because that last feature isn't available
+          cross-document in Firefox yet, the site deliberately stays in one
+          document and routes with the hash.
+        </p>
+        <blockquote>
+          Fewer moving parts isn't a limitation to apologise for. It's the
+          feature.
+        </blockquote>
+
+        <h2>Make it yours</h2>
+        <p>
+          Add a page by dropping an HTML fragment in <code>pages/</code>, adding a
+          line to <code>js/routes.js</code>, and linking to it. Add a post by
+          editing <code>data/posts.json</code>. Retune the look from
+          <code>styles/tokens.css</code>. Then push it to any static host. The
+          <a class="link" href="#/blog">build log</a> walks through each technique
+          in more detail.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
